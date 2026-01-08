@@ -5,6 +5,9 @@ BEGIN
 	BEGIN TRY
 		--Bulk insertion of data (full load: TRUNCATE + INSERT)
 		SET @start_time = GETDATE();
+		PRINT 'LOADING BRONZE LAYER';
+		PRINT '-------------------------------------------------------------------------------------------------';
+		PRINT 'CRM';
 		TRUNCATE TABLE bronze.crm_cust_info;
 		BULK INSERT bronze.crm_cust_info
 		FROM 'C:\Users\saisa\OneDrive\Desktop\SQLproject\sql-data-warehouse-project\datasets\source_crm\cust_info.csv'
@@ -32,6 +35,8 @@ BEGIN
 			TABLOCK
 		);
 
+		PRINT '------------------------------------------------------------------------------------------------';
+		PRINT 'ERP';
 		TRUNCATE TABLE bronze.erp_cust_az12;
 		BULK INSERT bronze.erp_cust_az12
 		FROM 'C:\Users\saisa\OneDrive\Desktop\SQLproject\sql-data-warehouse-project\datasets\source_erp\cust_az12.csv'
@@ -59,7 +64,7 @@ BEGIN
 			TABLOCK
 		);
 		SET @finish_time = GETDATE();
-		PRINT 'Load Duration:' + CAST(DATEDIFF(second,@start_time,@finish_time) AS NVARCHAR)
+		PRINT 'Load Duration: ' + CAST(DATEDIFF(second,@start_time,@finish_time) AS NVARCHAR) + ' seconds';
 		END TRY
 		BEGIN CATCH 
 			PRINT 'ERROR OCCURED DURING LOADING BRONZE LAYER';
